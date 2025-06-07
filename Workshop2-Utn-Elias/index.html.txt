@@ -35,6 +35,7 @@
                         <li>Bootstrap</li>
                         <li>Karate Koreano</li>
 			<li>C#</li>
+			<li>JavaScript</li>
                     </ul>
                 </section>
             </div>
