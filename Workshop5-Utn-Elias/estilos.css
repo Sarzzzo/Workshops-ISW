@@ -1,0 +1,100 @@
+:root {
+    --color-principal: #ff4d4d;
+    --fondo-opaco: rgba(0, 0, 0, 0.75);
+    --tipografia-titulo: 'Playfair Display', serif;
+    --sombra-img: 0 0 30px rgba(255, 0, 0, 0.4);
+    --borde-redondo: 20px;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    background: url('img/fondo_perfume.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    line-height: 1.6;
+}
+
+ul {
+    margin-left: 20px;
+}
+
+#mainOverlay {
+    background-color: var(--fondo-opaco);
+    padding: 40px 20px;
+}
+
+#precio {
+    text-align: center;
+    font-size: 1.5em;
+    margin-top: 20px;
+    color: #ff9999;
+}
+
+.overlay {
+    border-left: 5px solid var(--color-principal);
+}
+
+.main-image {
+    display: flex;
+    justify-content: center;
+    margin: 30px 0;
+}
+
+section[data-info="intro"] {
+    border: 2px dashed var(--color-principal);
+    padding: 10px;
+}
+
+.main-image img {
+    max-width: 300px;
+    border-radius: var(--borde-redondo);
+    box-shadow: var(--sombra-img);
+}
+
+h2, .cita {
+    font-family: var(--tipografia-titulo);
+    color: var(--color-principal);
+}
+
+header > img {
+    width: 150px;
+    border-radius: 10px;
+}
+
+section:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: background-color 0.3s ease;
+}
+
+ul li:first-child {
+    font-weight: bold;
+    color: #ffe6e6;
+}
+
+p:nth-child(even) {
+    color: #ccc;
+}
+
+h2::before {
+    content: "✦ ";
+    color: gold;
+}
+
+p::first-line {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.cita.especial {
+    font-style: italic;
+    text-align: center;
+    margin: 30px 0;
+    color: #dddddd;
+}
+
+footer {
+    text-align: center;
+    font-size: 0.9em;
+    padding: 20px;
+    color: #ccc;
+}
