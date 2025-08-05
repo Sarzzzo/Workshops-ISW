@@ -136,9 +136,6 @@ footer {
     text-decoration: underline;
 }
 
-
-/* ============ RESPONSIVE DESIGN ============ */
-
 @media (max-width: 768px) {
     section {
         padding: 20px 30px;
@@ -157,34 +154,5 @@ footer {
     footer {
         font-size: 13px;
         padding: 15px;
-    }
-}
-
-@media (max-width: 480px) {
-    section {
-        padding: 15px 20px;
-        margin: 40px 0;
-    }
-
-    .imagen_logo img {
-        height: 60px;
-    }
-
-    #imagengoogle {
-        height: 35px;
-    }
-
-    .btn-login {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .footer-nav a {
-        display: inline-block;
-        margin: 5px;
-    }
-
-    .footer-nav p {
-        font-size: 12px;
     }
 }

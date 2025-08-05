@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Author</title>
+  <style>
+    table {
+      margin-top: 20px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table, th, td {
+      border: 1px solid #000;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    .delete-link, .edit-link {
+      color: blue;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    .delete-link {
+      color: red;
+    }
+  </style>
+  <!-- jQuery para facilitar selección y eventos -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+  <!-- Formulario para insertar autores -->
+  <section>
+    <div class="d-flex flex-column">
+      <h1>Add new author</h1>
+      <div class="form-contact-info">
+        <div class="error_msg" id="error_msg"></div>
+        <form id="book-form">
+          <input type="text" class="form-input" name="title" placeholder="Insert the author" id="title" />
+          <!-- Botón que cambia dinámicamente entre Add y Update -->
+          <input type="button" value="Add" id="add-author-button" />
+          
+        <p class="alrUser mt-2">Necesitas regresar? <a href="addBook.html">regresar?</a></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tabla donde se mostrarán los autores -->
+  <section>
+    <h2>Author List</h2>
+    <table id="authors-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Author Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Las filas se llenan dinámicamente -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    // ID del autor que se está editando, null si no hay edición en curso
+    let editingAuthorId = null;
+
+    // Cargar y mostrar los autores en la tabla
+    function loadAuthors() {
+      const authorsDb = JSON.parse(localStorage.getItem('authors')) || [];
+      const tbody = $('#authors-table tbody');
+      tbody.empty(); // Limpia la tabla antes de agregar filas
+
+      authorsDb.forEach(author => {
+        const row = `<tr>
+          <td>${author.id}</td>
+          <td>${author.name}</td>
+          <td>
+            <span class="edit-link" data-id="${author.id}">Edit</span>
+            <span class="delete-link" data-id="${author.id}">Delete</span>
+          </td>
+        </tr>`;
+        tbody.append(row);
+      });
+
+      // Asignar evento para el botón Edit
+      $('.edit-link').click(function () {
+        const id = parseInt($(this).data('id'));
+        startEditingAuthor(id);
+      });
+
+      // Asignar evento para el botón Delete
+      $('.delete-link').click(function () {
+        const id = parseInt($(this).data('id'));
+        deleteAuthor(id);
+      });
+    }
+
+    // Agrega un nuevo autor a localStorage
+    function addAuthor() {
+      const authorName = $('#title').val().trim();
+
+      // Validación
+      if (authorName === '') {
+        $('#error_msg').text('Author name cannot be empty');
+        return;
+      } else {
+        $('#error_msg').text('');
+      }
+
+      let authorsDb = JSON.parse(localStorage.getItem('authors')) || [];
+
+      // Crear un nuevo ID único
+      const newId = authorsDb.length > 0 ? Math.max(...authorsDb.map(a => a.id)) + 1 : 1;
+
+      const author = {
+        id: newId,
+        name: authorName
+      };
+
+      authorsDb.push(author);
+      localStorage.setItem('authors', JSON.stringify(authorsDb));
+
+      $('#title').val(''); // Limpiar input
+      loadAuthors(); // Actualizar tabla
+    }
+
+    // Comenzar a editar un autor específico
+    function startEditingAuthor(id) {
+      const authorsDb = JSON.parse(localStorage.getItem('authors')) || [];
+      const author = authorsDb.find(a => a.id === id);
+      if (!author) return;
+
+      // Poner el nombre en el input
+      $('#title').val(author.name);
+
+      // Cambiar modo a edición
+      editingAuthorId = id;
+      $('#add-author-button').val('Update');
+    }
+
+    // Actualizar un autor ya existente
+    function updateAuthor() {
+      const newName = $('#title').val().trim();
+
+      // Validación
+      if (newName === '') {
+        $('#error_msg').text('Author name cannot be empty');
+        return;
+      } else {
+        $('#error_msg').text('');
+      }
+
+      let authorsDb = JSON.parse(localStorage.getItem('authors')) || [];
+
+      // Buscar y actualizar el autor
+      authorsDb = authorsDb.map(author => {
+        if (author.id === editingAuthorId) {
+          return { ...author, name: newName };
+        }
+        return author;
+      });
+
+      localStorage.setItem('authors', JSON.stringify(authorsDb));
+
+      // Resetear estado del formulario
+      editingAuthorId = null;
+      $('#title').val('');
+      $('#add-author-button').val('Add');
+      loadAuthors();
+    }
+
+    // Eliminar un autor por su ID
+    function deleteAuthor(id) {
+      let authorsDb = JSON.parse(localStorage.getItem('authors')) || [];
+
+      authorsDb = authorsDb.filter(author => author.id !== id);
+      localStorage.setItem('authors', JSON.stringify(authorsDb));
+      loadAuthors();
+    }
+
+    // Evento click para el botón Add/Update
+    $('#add-author-button').click(function () {
+      if (editingAuthorId !== null) {
+        updateAuthor(); // Si estamos editando, actualiza
+      } else {
+        addAuthor(); // Si no, añade nuevo
+      }
+    });
+
+    // Cargar la tabla cuando el DOM esté listo
+    $(document).ready(function () {
+      loadAuthors();
+    });
+  </script>
+
+</body>
+</html>
